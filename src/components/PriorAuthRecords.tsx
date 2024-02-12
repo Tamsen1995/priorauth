@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/router";
 import FileUploadModal from "./FileUploadModal";
+import mockResponse from "../../fixtures/example-response.json";
 
 interface Props {}
 
 const PriorAuthRecords: React.FC<Props> = () => {
-  const [modalIsOpen, setModalIsOpen] = React.useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
-  const createPriorAuth = () => {
-    console.log("Create Prior Auth button clicked");
+  const createPriorAuth = async () => {
+    setIsLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setIsLoading(false);
+    return mockResponse.case_id;
   };
+
   const openModal = () => {
     setModalIsOpen(true);
   };
@@ -16,6 +24,18 @@ const PriorAuthRecords: React.FC<Props> = () => {
   const closeModal = () => {
     setModalIsOpen(false);
   };
+
+  const onSubmit = async () => {
+    console.log("Submit button clicked");
+    const priorAuthId = await createPriorAuth();
+    closeModal();
+    routeToNewPage(priorAuthId);
+  };
+
+  const routeToNewPage = (priorAuthId: string) => {
+    router.push(`/prior-auth/${priorAuthId}`);
+  };
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex flex-col items-center justify-center h-screen">
@@ -40,7 +60,12 @@ const PriorAuthRecords: React.FC<Props> = () => {
           </div>
         </div>
       </div>
-      <FileUploadModal isOpen={modalIsOpen} onRequestClose={closeModal} />
+      <FileUploadModal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        onSubmit={onSubmit}
+        isLoading={isLoading}
+      />
     </div>
   );
 };

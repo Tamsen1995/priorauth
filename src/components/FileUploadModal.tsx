@@ -4,11 +4,15 @@ import Modal from "react-modal";
 interface FileUploadModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
+  onSubmit: () => void;
+  isLoading: boolean;
 }
 
 const FileUploadModal: React.FC<FileUploadModalProps> = ({
   isOpen,
   onRequestClose,
+  onSubmit,
+  isLoading,
 }) => (
   <Modal
     isOpen={isOpen}
@@ -17,7 +21,13 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
     className="flex items-center justify-center outline-none border-0"
     overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
   >
-    <div className="bg-white p-6 rounded-lg shadow-md max-w-lg w-full">
+    <div className="bg-white p-6 rounded-lg shadow-md max-w-lg w-full relative">
+      <button
+        onClick={onRequestClose}
+        className="absolute top-2 right-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+      >
+        X
+      </button>
       <h2 className="text-2xl font-bold mb-4 text-center">Upload files</h2>
       <div className="mb-4">
         <label
@@ -48,10 +58,11 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
         />
       </div>
       <button
-        onClick={onRequestClose}
+        onClick={onSubmit}
         className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        disabled={isLoading}
       >
-        Close
+        {isLoading ? "Loading..." : "Submit"}
       </button>
     </div>
   </Modal>
