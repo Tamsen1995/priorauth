@@ -28,16 +28,7 @@ const PriorAuthPage = () => {
   const { priorAuthId } = router.query;
   const data = usePriorAuthData(priorAuthId as string);
 
-  console.log(data);
-
-  return (
-    <div>
-      <h1>Prior Authorization Page</h1>
-      <p>Prior Authorization ID: {priorAuthId}</p>
-
-      {data && <PriorAuthResponse data={data} />}
-    </div>
-  );
+  return <div>{data && <PriorAuthResponse data={data} />}</div>;
 };
 
 export default PriorAuthPage;
