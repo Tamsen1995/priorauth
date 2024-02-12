@@ -48,10 +48,17 @@ const Collapsible: FC<{
       >
         {title}
       </button>
-      {isOpen && <div className="p-4">{content}</div>}
+      <div
+        className={`transition-all duration-500 ease-in-out overflow-hidden ${
+          isOpen ? "max-h-screen" : "max-h-0"
+        }`}
+      >
+        <div className="p-4">{content}</div>
+      </div>
     </div>
   );
 };
+
 const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
   return (
     <div className="p-6 bg-gray-100 shadow-xl rounded-lg">
