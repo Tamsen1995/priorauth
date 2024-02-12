@@ -31,14 +31,17 @@ export interface PriorAuthData {
   steps: Step[];
 }
 
-const Collapsible: FC<{ title: string; content: JSX.Element }> = ({
-  title,
-  content,
-}) => {
+const Collapsible: FC<{
+  title: string;
+  content: JSX.Element;
+  className?: string;
+}> = ({ title, content, className }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="mb-4 bg-white rounded-lg shadow-md overflow-hidden">
+    <div
+      className={`mb-4 bg-white rounded-lg shadow-md overflow-hidden ${className}`}
+    >
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full py-2 px-4 text-left font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none transition-colors duration-200"
@@ -49,35 +52,36 @@ const Collapsible: FC<{ title: string; content: JSX.Element }> = ({
     </div>
   );
 };
-
 const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
   return (
-    <div className="p-6 bg-white shadow-xl rounded-lg">
-      <h2 className="text-2xl font-bold mb-4 text-blue-600">
+    <div className="p-6 bg-gray-100 shadow-xl rounded-lg">
+      <h2 className="text-2xl font-bold mb-4 text-blue-700 border-b pb-2">
         Procedure: {data.procedure_name}
       </h2>
-      <p className="mb-2 text-gray-700">
+      <p className="mb-2 text-gray-800">
         <strong className="font-semibold">Case ID:</strong> {data.case_id}
       </p>
-      <p className="mb-2 text-gray-700">
+      <p className="mb-2 text-gray-800">
         <strong className="font-semibold">Status:</strong> {data.status}
       </p>
-      <p className="mb-2 text-gray-700">
+      <p className="mb-2 text-gray-800">
         <strong className="font-semibold">CPT Codes:</strong>{" "}
         {data.cpt_codes.join(", ")}
       </p>
       <div
-        className={`mb-4 font-bold ${
-          data.is_met ? "text-green-500" : "text-red-500"
+        className={`mb-4 font-bold text-lg ${
+          data.is_met ? "text-green-600" : "text-red-600"
         }`}
       >
         Determination: {data.is_met ? "Approved" : "Denied"}
       </div>
-      <p className="mb-4 text-gray-700">
+      <p className="mb-4 text-gray-800">
         <strong className="font-semibold">Summary:</strong> {data.summary}
       </p>
       <div className="mt-4">
-        <h3 className="text-xl font-bold mb-2 text-blue-600">Steps:</h3>
+        <h3 className="text-xl font-bold mb-2 text-blue-700 border-b pb-2">
+          Steps:
+        </h3>
         {data.steps.map((step, index) => (
           <Collapsible
             key={step.key}
@@ -101,16 +105,21 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
                   ))}
                 </ul>
                 {step.evidence && step.evidence.length > 0 && (
-                  <>
-                    <h4 className="mt-4 mb-2 font-semibold">Evidence:</h4>
-                    <ul className="list-disc list-inside">
-                      {step.evidence.map((evidence, eIndex) => (
-                        <li key={eIndex} className="text-sm">
-                          {evidence.content} - Page {evidence.page_number}
-                        </li>
-                      ))}
-                    </ul>
-                  </>
+                  <Collapsible
+                    title="Evidence"
+                    className="bg-blue-100 border-l-4 border-blue-500"
+                    content={
+                      <>
+                        <ul className="list-disc list-inside">
+                          {step.evidence.map((evidence, eIndex) => (
+                            <li key={eIndex} className="text-sm">
+                              {evidence.content} - Page {evidence.page_number}
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    }
+                  />
                 )}
               </div>
             }
