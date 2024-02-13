@@ -40,7 +40,7 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
       <div className="bg-white p-8 shadow-2xl max-w-3xl w-full relative transition-all duration-500 ease-in-out animate-fade-in">
         <button
           onClick={onRequestClose}
-          className="absolute top-4 right-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-md focus:outline-none focus:shadow-outline"
+          className="absolute top-4 right-4 bg-blue-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-md focus:outline-none focus:shadow-outline"
         >
           CLOSE{" "}
         </button>
@@ -52,7 +52,7 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
             <CloudUploadIcon /> Choose first file
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-lg"
+            className="shadow h-14 appearance-none border-0 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg bg-gray-100"
             type="file"
             id="file1"
             accept=".pdf"
@@ -67,7 +67,7 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
             <CloudUploadIcon /> Choose second file
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-lg"
+            className="shadow h-14 appearance-none border-0 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg bg-gray-100"
             type="file"
             id="file2"
             accept=".pdf"
