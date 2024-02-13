@@ -14,6 +14,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { green, red } from "@mui/material/colors";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import Chip from "@mui/material/Chip";
 
 export interface Evidence {
   content: string;
@@ -137,7 +138,15 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
                   title={`Step ${index + 1}: ${step.question}`}
                   content={
                     <Box>
-                      <div className="text-base p-5">{step.reasoning}</div>
+                      {/* reasoning is formatted according to newlines */}
+                      <div className="text-base p-5">
+                        {step.reasoning.split("\n").map((line, index) => (
+                          <React.Fragment key={index}>
+                            {line}
+                            <br />
+                          </React.Fragment>
+                        ))}
+                      </div>
                       <ul className="space-y-2">
                         {step.options.map((option) => (
                           <li
@@ -158,11 +167,16 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
                         <Collapsible
                           title="Evidence"
                           content={
-                            <List>
+                            <List className="p-2">
                               {step.evidence.map((evidence, eIndex) => (
-                                <ListItem key={eIndex} dense>
+                                <ListItem className="pb-4" key={eIndex} dense>
+                                  <Chip
+                                    label={`Page ${evidence.page_number}`}
+                                    variant="filled"
+                                    className="mr-4"
+                                  />
                                   <ListItemText
-                                    primary={`${evidence.content} - Page ${evidence.page_number}`}
+                                    primary={`${evidence.content}`}
                                   />
                                 </ListItem>
                               ))}
