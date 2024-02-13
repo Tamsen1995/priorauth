@@ -167,13 +167,13 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
                         <Collapsible
                           title="Evidence"
                           content={
-                            <List className="p-2">
+                            <List className="bg-gray-100 rounded-lg">
                               {step.evidence.map((evidence, eIndex) => (
                                 <ListItem className="pb-4" key={eIndex} dense>
                                   <Chip
                                     label={`Page ${evidence.page_number}`}
                                     variant="filled"
-                                    className="mr-4"
+                                    className="mr-4 bg-blue-200"
                                   />
                                   <ListItemText
                                     primary={`${evidence.content}`}
