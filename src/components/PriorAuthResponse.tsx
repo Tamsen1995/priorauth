@@ -74,6 +74,16 @@ const Collapsible: FC<{
   );
 };
 
+// InfoItem Component
+const InfoItem: FC<{ label: string; value: string | string[] }> = ({
+  label,
+  value,
+}) => (
+  <div className="text-base p-5">
+    <strong>{label}:</strong> {Array.isArray(value) ? value.join(", ") : value}
+  </div>
+);
+
 const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
   const renderStepsFlowIndicator = () => {
     return (
@@ -103,18 +113,10 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
   return (
     <div>
       <Paper elevation={3} className="m-5 p-10">
-        <div className="text-2xl mb-2 pl-5">
-          Procedure: {data.procedure_name}
-        </div>
-        <div className="text-base p-5">
-          <strong>Case ID:</strong> {data.case_id}
-        </div>
-        <div className="text-base p-5">
-          <strong>Status:</strong> {data.status}
-        </div>
-        <div className="text-base p-5">
-          <strong>CPT Codes:</strong> {data.cpt_codes.join(", ")}
-        </div>
+        <InfoItem label="Procedure" value={data.procedure_name} />
+        <InfoItem label="Case ID" value={data.case_id} />
+        <InfoItem label="Status" value={data.status} />
+        <InfoItem label="CPT Codes" value={data.cpt_codes} />
         {renderStepsFlowIndicator()}
         <div
           className={`text-lg ${
