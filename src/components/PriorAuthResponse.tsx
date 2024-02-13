@@ -147,11 +147,11 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
                           </React.Fragment>
                         ))}
                       </div>
-                      <ul className="space-y-2">
+                      <ul className="pb-5 pt-5">
                         {step.options.map((option) => (
                           <li
                             key={option.key}
-                            className="flex items-center space-x-2"
+                            className="flex items-center pl-5 pb-4"
                           >
                             <input
                               type="checkbox"
@@ -159,7 +159,7 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
                               readOnly
                               className="form-checkbox h-5 w-5 text-blue-600"
                             />
-                            <p className="text-gray-700 p-5">{option.text}</p>
+                            <p className="text-gray-700 pl-2">{option.text}</p>
                           </li>
                         ))}
                       </ul>
