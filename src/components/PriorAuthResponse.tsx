@@ -108,32 +108,30 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
   return (
     <div>
       <Paper elevation={3} className="m-5 p-10">
-        <Typography variant="h4" gutterBottom>
-          Procedure: {data.procedure_name}
-        </Typography>
-        <Typography variant="body1">
+        <div className="text-2xl mb-2">Procedure: {data.procedure_name}</div>
+        <div className="text-base p-5">
           <strong>Case ID:</strong> {data.case_id}
-        </Typography>
-        <Typography variant="body1">
+        </div>
+        <div className="text-base p-5">
           <strong>Status:</strong> {data.status}
-        </Typography>
-        <Typography variant="body1">
+        </div>
+        <div className="text-base p-5">
           <strong>CPT Codes:</strong> {data.cpt_codes.join(", ")}
-        </Typography>
+        </div>
         {renderStepsFlowIndicator()}
-        <Typography
-          variant="h6"
-          sx={{ color: data.is_met ? green[500] : red[500] }}
+        <div
+          className={`text-lg ${
+            data.is_met ? "text-green-500" : "text-red-500"
+          } p-5`}
         >
           Determination: {data.is_met ? "Approved" : "Denied"}
-        </Typography>
-        <Typography variant="body1">
-          <strong>Summary:</strong> {data.summary}
-        </Typography>
+        </div>
+        <div className="text-base p-5">
+          <strong>Summary:</strong>
+          <span>{data.summary}</span>
+        </div>
         <Box mt={2}>
-          <Typography variant="h5" gutterBottom>
-            Steps:
-          </Typography>
+          <div className="text-xl mb-2">Steps:</div>
           {data.steps.map((step, index) => (
             <Box mb={2}>
               <Collapsible
@@ -141,15 +139,23 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
                 title={`Step ${index + 1}: ${step.question}`}
                 content={
                   <Box>
-                    <Typography variant="body1">{step.reasoning}</Typography>
-                    <List>
+                    <div className="text-base p-5">{step.reasoning}</div>
+                    <ul className="space-y-2">
                       {step.options.map((option) => (
-                        <ListItem key={option.key} dense>
-                          <Checkbox checked={option.selected} readOnly />
-                          <ListItemText primary={option.text} />
-                        </ListItem>
+                        <li
+                          key={option.key}
+                          className="flex items-center space-x-2"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={option.selected}
+                            readOnly
+                            className="form-checkbox h-5 w-5 text-blue-600"
+                          />
+                          <p className="text-gray-700 p-5">{option.text}</p>
+                        </li>
                       ))}
-                    </List>
+                    </ul>
                     {step.evidence && step.evidence.length > 0 && (
                       <Collapsible
                         title="Evidence"
