@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
+import CloseIcon from "@mui/icons-material/Close";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 interface FileUploadModalProps {
   isOpen: boolean;
@@ -8,70 +10,73 @@ interface FileUploadModalProps {
   isLoading: boolean;
 }
 
+function useFileInput() {
+  const [file, setFile] = useState<File | null>(null);
+
+  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFile(event.target.files ? event.target.files[0] : null);
+  };
+
+  return { file, onFileChange };
+}
+
 const FileUploadModal: React.FC<FileUploadModalProps> = ({
   isOpen,
   onRequestClose,
   onSubmit,
   isLoading,
 }) => {
-  const [file1, setFile1] = useState<File | null>(null);
-  const [file2, setFile2] = useState<File | null>(null);
-
-  const onFileChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    setFile: React.Dispatch<React.SetStateAction<File | null>>
-  ) => {
-    setFile(event.target.files ? event.target.files[0] : null);
-  };
+  const { file: file1, onFileChange: onFile1Change } = useFileInput();
+  const { file: file2, onFileChange: onFile2Change } = useFileInput();
 
   return (
     <Modal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       contentLabel="File Upload Modal"
-      className="flex items-center justify-center outline-none border-0"
-      overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+      className="flex items-center justify-center outline-none border-0 transition-all duration-500 ease-in-out animate-fade-in"
+      overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-all duration-500 ease-in-out animate-fade-in"
     >
-      <div className="bg-white p-6 rounded-lg shadow-md max-w-lg w-full relative">
+      <div className="bg-white p-8 shadow-2xl max-w-3xl w-full relative transition-all duration-500 ease-in-out animate-fade-in">
         <button
           onClick={onRequestClose}
-          className="absolute top-2 right-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+          className="absolute top-4 right-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-md focus:outline-none focus:shadow-outline"
         >
-          X
+          CLOSE{" "}
         </button>
-        <div className="mb-4">
+        <div className="mb-6">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-gray-700 text-lg font-bold mb-2"
             htmlFor="file1"
           >
-            Choose first file
+            <CloudUploadIcon /> Choose first file
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-lg"
             type="file"
             id="file1"
             accept=".pdf"
-            onChange={(event) => onFileChange(event, setFile1)}
+            onChange={onFile1Change}
           />
         </div>
-        <div className="mb-4">
+        <div className="mb-6">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-gray-700 text-lg font-bold mb-2"
             htmlFor="file2"
           >
-            Choose second file
+            <CloudUploadIcon /> Choose second file
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-lg"
             type="file"
             id="file2"
             accept=".pdf"
-            onChange={(event) => onFileChange(event, setFile2)}
+            onChange={onFile2Change}
           />
         </div>
         <button
           onClick={onSubmit}
-          className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline"
           disabled={isLoading || !file1 || !file2}
         >
           {isLoading ? "Loading..." : "Submit"}
