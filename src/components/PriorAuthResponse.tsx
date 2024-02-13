@@ -134,7 +134,7 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
             {data.steps.map((step, index) => (
               <Box mb={2}>
                 <Collapsible
-                  className="border-2 border-blue-100 rounded-lg shadow-sm"
+                  className="border-2 border-blue-100 rounded-lg shadow-md"
                   key={step.key}
                   title={`Step ${index + 1}: ${step.question}`}
                   content={
