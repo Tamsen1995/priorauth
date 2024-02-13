@@ -8,31 +8,34 @@ interface FileUploadModalProps {
   isLoading: boolean;
 }
 
+function useFileInput() {
+  const [file, setFile] = useState<File | null>(null);
+
+  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFile(event.target.files ? event.target.files[0] : null);
+  };
+
+  return { file, onFileChange };
+}
+
 const FileUploadModal: React.FC<FileUploadModalProps> = ({
   isOpen,
   onRequestClose,
   onSubmit,
   isLoading,
 }) => {
-  const [file1, setFile1] = useState<File | null>(null);
-  const [file2, setFile2] = useState<File | null>(null);
-
-  const onFileChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    setFile: React.Dispatch<React.SetStateAction<File | null>>
-  ) => {
-    setFile(event.target.files ? event.target.files[0] : null);
-  };
+  const { file: file1, onFileChange: onFile1Change } = useFileInput();
+  const { file: file2, onFileChange: onFile2Change } = useFileInput();
 
   return (
     <Modal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       contentLabel="File Upload Modal"
-      className="flex items-center justify-center outline-none border-0"
-      overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+      className="flex items-center justify-center outline-none border-0 transition-all duration-500 ease-in-out animate-fade-in"
+      overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-all duration-500 ease-in-out animate-fade-in"
     >
-      <div className="bg-white p-6 rounded-lg shadow-md max-w-lg w-full relative">
+      <div className="bg-white p-6 rounded-lg shadow-md max-w-lg w-full relative transition-all duration-500 ease-in-out animate-fade-in">
         <button
           onClick={onRequestClose}
           className="absolute top-2 right-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
@@ -51,7 +54,7 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
             type="file"
             id="file1"
             accept=".pdf"
-            onChange={(event) => onFileChange(event, setFile1)}
+            onChange={onFile1Change}
           />
         </div>
         <div className="mb-4">
@@ -66,7 +69,7 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
             type="file"
             id="file2"
             accept=".pdf"
-            onChange={(event) => onFileChange(event, setFile2)}
+            onChange={onFile2Change}
           />
         </div>
         <button
