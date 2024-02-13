@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { green, red } from "@mui/material/colors";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
 export interface Evidence {
   content: string;
@@ -80,7 +81,7 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
         {data.steps.map((step, index) => (
           <div key={index} className="flex items-center mr-4">
             <div
-              className={`rounded-full h-8 w-8 flex items-center justify-center text-white ${
+              className={`rounded-full h-6 w-6 flex items-center justify-center text-white ${
                 step.is_met ? "bg-green-500" : "bg-red-500"
               }`}
             >
@@ -89,13 +90,7 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
             {index < data.steps.length - 1 && (
               <div className="flex items-center">
                 <div className="flex-auto border-t border-gray-300"></div>
-                <svg
-                  className="w-6 h-6 fill-current text-gray-300"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M1 10l9 9 9-9-9-9-9 9zm12-8l7 8-7 8V2z" />
-                </svg>
+                <ArrowRightIcon />
                 <div className="flex-auto border-t border-gray-300"></div>
               </div>
             )}
