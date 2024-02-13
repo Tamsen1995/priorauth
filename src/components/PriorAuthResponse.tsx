@@ -77,7 +77,7 @@ const Collapsible: FC<{
 const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
   const renderStepsFlowIndicator = () => {
     return (
-      <div className="flex items-center mb-6 overflow-x-auto">
+      <div className="flex items-center mb-6 overflow-x-auto pt-5 pl-5">
         {data.steps.map((step, index) => (
           <div key={index} className="flex items-center mr-4">
             <div
@@ -103,7 +103,9 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
   return (
     <div>
       <Paper elevation={3} className="m-5 p-10">
-        <div className="text-2xl mb-2">Procedure: {data.procedure_name}</div>
+        <div className="text-2xl mb-2 pl-5">
+          Procedure: {data.procedure_name}
+        </div>
         <div className="text-base p-5">
           <strong>Case ID:</strong> {data.case_id}
         </div>
@@ -125,55 +127,58 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
           <strong>Summary:</strong>
           <span>{data.summary}</span>
         </div>
-        <Box mt={2}>
-          <div className="text-xl mb-2">Steps:</div>
-          {data.steps.map((step, index) => (
-            <Box mb={2}>
-              <Collapsible
-                key={step.key}
-                title={`Step ${index + 1}: ${step.question}`}
-                content={
-                  <Box>
-                    <div className="text-base p-5">{step.reasoning}</div>
-                    <ul className="space-y-2">
-                      {step.options.map((option) => (
-                        <li
-                          key={option.key}
-                          className="flex items-center space-x-2"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={option.selected}
-                            readOnly
-                            className="form-checkbox h-5 w-5 text-blue-600"
-                          />
-                          <p className="text-gray-700 p-5">{option.text}</p>
-                        </li>
-                      ))}
-                    </ul>
-                    {step.evidence && step.evidence.length > 0 && (
-                      <Collapsible
-                        title="Evidence"
-                        content={
-                          <List>
-                            {step.evidence.map((evidence, eIndex) => (
-                              <ListItem key={eIndex} dense>
-                                <ListItemText
-                                  primary={`${evidence.content} - Page ${evidence.page_number}`}
-                                />
-                              </ListItem>
-                            ))}
-                          </List>
-                        }
-                      />
-                    )}
-                  </Box>
-                }
-              />
-              <Divider />
-            </Box>
-          ))}
-        </Box>
+        <div className="p-5">
+          <Box mt={2}>
+            <div className="text-xl mb-2">Steps:</div>
+            {data.steps.map((step, index) => (
+              <Box mb={2}>
+                <Collapsible
+                  className="border-8 rounded-lg"
+                  key={step.key}
+                  title={`Step ${index + 1}: ${step.question}`}
+                  content={
+                    <Box>
+                      <div className="text-base p-5">{step.reasoning}</div>
+                      <ul className="space-y-2">
+                        {step.options.map((option) => (
+                          <li
+                            key={option.key}
+                            className="flex items-center space-x-2"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={option.selected}
+                              readOnly
+                              className="form-checkbox h-5 w-5 text-blue-600"
+                            />
+                            <p className="text-gray-700 p-5">{option.text}</p>
+                          </li>
+                        ))}
+                      </ul>
+                      {step.evidence && step.evidence.length > 0 && (
+                        <Collapsible
+                          title="Evidence"
+                          content={
+                            <List>
+                              {step.evidence.map((evidence, eIndex) => (
+                                <ListItem key={eIndex} dense>
+                                  <ListItemText
+                                    primary={`${evidence.content} - Page ${evidence.page_number}`}
+                                  />
+                                </ListItem>
+                              ))}
+                            </List>
+                          }
+                        />
+                      )}
+                    </Box>
+                  }
+                />
+                <Divider />
+              </Box>
+            ))}
+          </Box>
+        </div>
       </Paper>
     </div>
   );
