@@ -74,7 +74,6 @@ const Collapsible: FC<{
   );
 };
 
-// InfoItem Component
 const InfoItem: FC<{ label: string; value: string | string[] }> = ({
   label,
   value,
@@ -84,32 +83,30 @@ const InfoItem: FC<{ label: string; value: string | string[] }> = ({
   </div>
 );
 
-const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
-  const renderStepsFlowIndicator = () => {
-    return (
-      <div className="flex items-center mb-6 overflow-x-auto pt-5 pl-5">
-        {data.steps.map((step, index) => (
-          <div key={index} className="flex items-center mr-4">
-            <div
-              className={`rounded-full h-6 w-6 flex items-center justify-center text-white ${
-                step.is_met ? "bg-green-500" : "bg-red-500"
-              }`}
-            >
-              {index + 1}
-            </div>
-            {index < data.steps.length - 1 && (
-              <div className="flex items-center">
-                <div className="flex-auto border-t border-gray-300"></div>
-                <ArrowRightIcon />
-                <div className="flex-auto border-t border-gray-300"></div>
-              </div>
-            )}
+const StepFlowIndicator: FC<{ steps: Step[] }> = ({ steps }) => (
+  <div className="flex items-center mb-6 overflow-x-auto pt-5 pl-5">
+    {steps.map((step, index) => (
+      <div key={index} className="flex items-center mr-4">
+        <div
+          className={`rounded-full h-6 w-6 flex items-center justify-center text-white ${
+            step.is_met ? "bg-green-500" : "bg-red-500"
+          }`}
+        >
+          {index + 1}
+        </div>
+        {index < steps.length - 1 && (
+          <div className="flex items-center">
+            <div className="flex-auto border-t border-gray-300"></div>
+            <ArrowRightIcon />
+            <div className="flex-auto border-t border-gray-300"></div>
           </div>
-        ))}
+        )}
       </div>
-    );
-  };
+    ))}
+  </div>
+);
 
+const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
   return (
     <div>
       <Paper elevation={3} className="m-5 p-10">
@@ -117,7 +114,7 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
         <InfoItem label="Case ID" value={data.case_id} />
         <InfoItem label="Status" value={data.status} />
         <InfoItem label="CPT Codes" value={data.cpt_codes} />
-        {renderStepsFlowIndicator()}
+        <StepFlowIndicator steps={data.steps} />
         <div
           className={`text-lg ${
             data.is_met ? "text-green-500" : "text-red-500"
