@@ -1,4 +1,18 @@
 import React, { useState, FC } from "react";
+import {
+  Button,
+  Checkbox,
+  Typography,
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
+  Collapse,
+  Box,
+  Divider,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { green, red } from "@mui/material/colors";
 
 export interface Evidence {
   content: string;
@@ -19,6 +33,7 @@ export interface Step {
   reasoning: string;
   options: Option[];
   evidence?: Evidence[];
+  is_met: boolean;
 }
 
 export interface PriorAuthData {
@@ -39,100 +54,126 @@ const Collapsible: FC<{
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div
-      className={`mb-4 bg-white rounded-lg shadow-md overflow-hidden ${className}`}
-    >
-      <button
+    <Box mb={2} className={className}>
+      <Button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full py-2 px-4 text-left font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none transition-colors duration-200"
+        startIcon={<ExpandMoreIcon />}
+        fullWidth
+        variant="outlined"
+        aria-expanded={isOpen}
       >
         {title}
-      </button>
-      <div
-        className={`transition-all duration-500 ease-in-out overflow-hidden ${
-          isOpen ? "max-h-screen" : "max-h-0"
-        }`}
-      >
-        <div className="p-4">{content}</div>
-      </div>
-    </div>
+      </Button>
+      <Collapse in={isOpen}>
+        <Paper elevation={1}>
+          <Box p={2}>{content}</Box>
+        </Paper>
+      </Collapse>
+    </Box>
   );
 };
 
 const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
-  return (
-    <div className="p-6 bg-gray-100 shadow-xl rounded-lg">
-      <h2 className="text-2xl font-bold mb-4 text-blue-700 border-b pb-2">
-        Procedure: {data.procedure_name}
-      </h2>
-      <p className="mb-2 text-gray-800">
-        <strong className="font-semibold">Case ID:</strong> {data.case_id}
-      </p>
-      <p className="mb-2 text-gray-800">
-        <strong className="font-semibold">Status:</strong> {data.status}
-      </p>
-      <p className="mb-2 text-gray-800">
-        <strong className="font-semibold">CPT Codes:</strong>{" "}
-        {data.cpt_codes.join(", ")}
-      </p>
-      <div
-        className={`mb-4 font-bold text-lg ${
-          data.is_met ? "text-green-600" : "text-red-600"
-        }`}
-      >
-        Determination: {data.is_met ? "Approved" : "Denied"}
-      </div>
-      <p className="mb-4 text-gray-800">
-        <strong className="font-semibold">Summary:</strong> {data.summary}
-      </p>
-      <div className="mt-4">
-        <h3 className="text-xl font-bold mb-2 text-blue-700 border-b pb-2">
-          Steps:
-        </h3>
+  const renderStepsFlowIndicator = () => {
+    return (
+      <div className="flex items-center mb-6 overflow-x-auto">
         {data.steps.map((step, index) => (
-          <Collapsible
-            key={step.key}
-            title={`Step ${index + 1}: ${step.question}`}
-            content={
-              <div className="p-2 text-gray-700">
-                <p className="mb-2">{step.reasoning}</p>
-                <ul className="list-disc list-inside">
-                  {step.options.map((option) => (
-                    <div key={option.key} className="flex items-center mb-1">
-                      <input
-                        type="checkbox"
-                        checked={option.selected}
-                        className="form-checkbox h-5 w-5 text-blue-600"
-                        readOnly
-                      />
-                      <label className="ml-2 text-gray-700">
-                        {option.text}
-                      </label>
-                    </div>
-                  ))}
-                </ul>
-                {step.evidence && step.evidence.length > 0 && (
-                  <Collapsible
-                    title="Evidence"
-                    className="bg-blue-100 border-l-4 border-blue-500"
-                    content={
-                      <>
-                        <ul className="list-disc list-inside">
-                          {step.evidence.map((evidence, eIndex) => (
-                            <li key={eIndex} className="text-sm">
-                              {evidence.content} - Page {evidence.page_number}
-                            </li>
-                          ))}
-                        </ul>
-                      </>
-                    }
-                  />
-                )}
+          <div key={index} className="flex items-center mr-4">
+            <div
+              className={`rounded-full h-8 w-8 flex items-center justify-center text-white ${
+                step.is_met ? "bg-green-500" : "bg-red-500"
+              }`}
+            >
+              {index + 1}
+            </div>
+            {index < data.steps.length - 1 && (
+              <div className="flex items-center">
+                <div className="flex-auto border-t border-gray-300"></div>
+                <svg
+                  className="w-6 h-6 fill-current text-gray-300"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M1 10l9 9 9-9-9-9-9 9zm12-8l7 8-7 8V2z" />
+                </svg>
+                <div className="flex-auto border-t border-gray-300"></div>
               </div>
-            }
-          />
+            )}
+          </div>
         ))}
       </div>
+    );
+  };
+
+  return (
+    <div>
+      <Paper elevation={3} className="m-5 p-10">
+        <Typography variant="h4" gutterBottom>
+          Procedure: {data.procedure_name}
+        </Typography>
+        <Typography variant="body1">
+          <strong>Case ID:</strong> {data.case_id}
+        </Typography>
+        <Typography variant="body1">
+          <strong>Status:</strong> {data.status}
+        </Typography>
+        <Typography variant="body1">
+          <strong>CPT Codes:</strong> {data.cpt_codes.join(", ")}
+        </Typography>
+        {renderStepsFlowIndicator()}
+        <Typography
+          variant="h6"
+          sx={{ color: data.is_met ? green[500] : red[500] }}
+        >
+          Determination: {data.is_met ? "Approved" : "Denied"}
+        </Typography>
+        <Typography variant="body1">
+          <strong>Summary:</strong> {data.summary}
+        </Typography>
+        <Box mt={2}>
+          <Typography variant="h5" gutterBottom>
+            Steps:
+          </Typography>
+          {data.steps.map((step, index) => (
+            <Box mb={2}>
+              <Collapsible
+                key={step.key}
+                title={`Step ${index + 1}: ${step.question}`}
+                content={
+                  <Box>
+                    <Typography variant="body1">{step.reasoning}</Typography>
+                    <List>
+                      {step.options.map((option) => (
+                        <ListItem key={option.key} dense>
+                          <Checkbox checked={option.selected} readOnly />
+                          <ListItemText primary={option.text} />
+                        </ListItem>
+                      ))}
+                    </List>
+                    {step.evidence && step.evidence.length > 0 && (
+                      <Collapsible
+                        title="Evidence"
+                        content={
+                          <List>
+                            {step.evidence.map((evidence, eIndex) => (
+                              <ListItem key={eIndex} dense>
+                                <ListItemText
+                                  primary={`${evidence.content} - Page ${evidence.page_number}`}
+                                />
+                              </ListItem>
+                            ))}
+                          </List>
+                        }
+                      />
+                    )}
+                  </Box>
+                }
+              />
+              <Divider />
+            </Box>
+          ))}
+        </Box>
+      </Paper>
     </div>
   );
 };
