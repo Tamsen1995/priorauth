@@ -115,6 +115,7 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
         <InfoItem label="Case ID" value={data.case_id} />
         <InfoItem label="Status" value={data.status} />
         <InfoItem label="CPT Codes" value={data.cpt_codes} />
+        <div></div>
         <StepFlowIndicator steps={data.steps} />
         <div
           className={`text-lg ${
@@ -133,7 +134,7 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
             {data.steps.map((step, index) => (
               <Box mb={2}>
                 <Collapsible
-                  className="border-8 rounded-lg"
+                  className="border-2 rounded-lg"
                   key={step.key}
                   title={`Step ${index + 1}: ${step.question}`}
                   content={
