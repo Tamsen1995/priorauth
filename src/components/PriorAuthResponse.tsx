@@ -1,4 +1,4 @@
-import React, { useState, FC } from "react";
+import React, { useState, FC, ReactNode } from "react";
 import {
   Button,
   Checkbox,
@@ -13,6 +13,14 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { green, red } from "@mui/material/colors";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import Chip from "@mui/material/Chip";
+import {
+  Cloud,
+  CloudUpload,
+  CloudUploadOutlined,
+  ExpandLess,
+} from "@mui/icons-material";
 
 export interface Evidence {
   content: string;
@@ -57,7 +65,7 @@ const Collapsible: FC<{
     <Box mb={2} className={className}>
       <Button
         onClick={() => setIsOpen(!isOpen)}
-        startIcon={<ExpandMoreIcon />}
+        startIcon={isOpen ? <ExpandLess /> : <ExpandMoreIcon />}
         fullWidth
         variant="outlined"
         aria-expanded={isOpen}
@@ -66,113 +74,165 @@ const Collapsible: FC<{
       </Button>
       <Collapse in={isOpen}>
         <Paper elevation={1}>
-          <Box p={2}>{content}</Box>
+          <Box className="p-2">{content}</Box>
         </Paper>
       </Collapse>
     </Box>
   );
 };
 
-const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
-  const renderStepsFlowIndicator = () => {
-    return (
-      <div className="flex items-center mb-6 overflow-x-auto">
-        {data.steps.map((step, index) => (
-          <div key={index} className="flex items-center mr-4">
-            <div
-              className={`rounded-full h-8 w-8 flex items-center justify-center text-white ${
-                step.is_met ? "bg-green-500" : "bg-red-500"
-              }`}
-            >
-              {index + 1}
-            </div>
-            {index < data.steps.length - 1 && (
-              <div className="flex items-center">
-                <div className="flex-auto border-t border-gray-300"></div>
-                <svg
-                  className="w-6 h-6 fill-current text-gray-300"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M1 10l9 9 9-9-9-9-9 9zm12-8l7 8-7 8V2z" />
-                </svg>
-                <div className="flex-auto border-t border-gray-300"></div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    );
-  };
+const InfoItem: FC<{ label: string; value: string | string[] | ReactNode }> = ({
+  label,
+  value,
+}) => (
+  <div className="text-base p-5">
+    <strong>{label}:</strong> {Array.isArray(value) ? value.join(", ") : value}
+  </div>
+);
 
+const StepFlowIndicator: FC<{ steps: Step[]; className: string }> = ({
+  steps,
+  className,
+}) => (
+  <div className={className}>
+    {steps.map((step, index) => (
+      <div key={index} className="flex items-center mr-4">
+        <div
+          className={`rounded-full h-6 w-6 flex items-center justify-center text-white ${
+            step.is_met ? "bg-green-500" : "bg-red-500"
+          }`}
+        >
+          {index + 1}
+        </div>
+        {index < steps.length - 1 && (
+          <div className="flex items-center">
+            <div className="flex-auto border-t border-gray-300"></div>
+            <ArrowRightIcon />
+            <div className="flex-auto border-t border-gray-300"></div>
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+);
+
+const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
   return (
     <div>
       <Paper elevation={3} className="m-5 p-10">
-        <Typography variant="h4" gutterBottom>
-          Procedure: {data.procedure_name}
-        </Typography>
-        <Typography variant="body1">
-          <strong>Case ID:</strong> {data.case_id}
-        </Typography>
-        <Typography variant="body1">
-          <strong>Status:</strong> {data.status}
-        </Typography>
-        <Typography variant="body1">
-          <strong>CPT Codes:</strong> {data.cpt_codes.join(", ")}
-        </Typography>
-        {renderStepsFlowIndicator()}
-        <Typography
-          variant="h6"
-          sx={{ color: data.is_met ? green[500] : red[500] }}
+        <InfoItem label="Procedure" value={data.procedure_name} />
+        <InfoItem label="Case ID" value={data.case_id} />
+        <InfoItem label="Status" value={data.status} />
+        <div className="pl-5 ">
+          <span className="pr-5 text-base">
+            <strong>CPT Codes:</strong>
+          </span>
+          {data.cpt_codes.map((code) => (
+            <Chip
+              key={code}
+              label={`${code}`}
+              variant="filled"
+              className="mr-4 bg-gray-200"
+            />
+          ))}
+        </div>
+
+        <StepFlowIndicator
+          steps={data.steps}
+          className="flex items-center mb-6 overflow-x-auto pt-5 pl-5"
+        />
+        <div
+          className={`text-lg ${
+            data.is_met ? "text-green-500" : "text-red-500"
+          } p-5`}
         >
           Determination: {data.is_met ? "Approved" : "Denied"}
-        </Typography>
-        <Typography variant="body1">
-          <strong>Summary:</strong> {data.summary}
-        </Typography>
-        <Box mt={2}>
-          <Typography variant="h5" gutterBottom>
-            Steps:
-          </Typography>
-          {data.steps.map((step, index) => (
-            <Box mb={2}>
-              <Collapsible
-                key={step.key}
-                title={`Step ${index + 1}: ${step.question}`}
-                content={
-                  <Box>
-                    <Typography variant="body1">{step.reasoning}</Typography>
-                    <List>
-                      {step.options.map((option) => (
-                        <ListItem key={option.key} dense>
-                          <Checkbox checked={option.selected} readOnly />
-                          <ListItemText primary={option.text} />
-                        </ListItem>
-                      ))}
-                    </List>
-                    {step.evidence && step.evidence.length > 0 && (
+        </div>
+        <div className="text-base px-5">
+          <span className="pr-5">
+            <strong>Summary:</strong>
+          </span>
+          <span>{data.summary}</span>
+        </div>
+        <div className="p-5">
+          <Box mt={2}>
+            <div className="text-xl mb-2">Steps:</div>
+            {data.steps.map((step, index) => (
+              <Box mb={2}>
+                <Collapsible
+                  className={`border-2 border-blue-100 rounded-lg shadow-md ${
+                    step.is_met ? "bg-green-100" : "bg-red-100"
+                  }`}
+                  key={step.key}
+                  title={`Step ${index + 1}: ${step.question}`}
+                  content={
+                    <Box>
+                      {/* reasoning is formatted according to newlines */}
+
                       <Collapsible
-                        title="Evidence"
+                        className="bg-green-100"
+                        title="Selected Options"
                         content={
-                          <List>
-                            {step.evidence.map((evidence, eIndex) => (
-                              <ListItem key={eIndex} dense>
-                                <ListItemText
-                                  primary={`${evidence.content} - Page ${evidence.page_number}`}
-                                />
-                              </ListItem>
-                            ))}
-                          </List>
+                          <div className="bg-green-100">
+                            <ul className="pb-5 pt-5">
+                              {step.options.map((option) => (
+                                <li
+                                  key={option.key}
+                                  className="flex items-center pl-5 pb-4"
+                                >
+                                  <Checkbox
+                                    className="h-6 w-6 text-blue-600"
+                                    checked={option.selected}
+                                    disabled
+                                  />
+                                  <p className="text-gray-700 pl-2">
+                                    {option.text}
+                                  </p>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         }
                       />
-                    )}
-                  </Box>
-                }
-              />
-              <Divider />
-            </Box>
-          ))}
-        </Box>
+
+                      <div className="text-base p-5">
+                        {step.reasoning.split("\n").map((line, index) => (
+                          <React.Fragment key={index}>
+                            {line}
+                            <br />
+                          </React.Fragment>
+                        ))}
+                      </div>
+
+                      {step.evidence && step.evidence.length > 0 && (
+                        <Collapsible
+                          title="Evidence"
+                          content={
+                            <List className="bg-gray-100 rounded-lg">
+                              {step.evidence.map((evidence, eIndex) => (
+                                <ListItem className="pb-4" key={eIndex} dense>
+                                  <Chip
+                                    label={`Page ${evidence.page_number}`}
+                                    variant="filled"
+                                    className="mr-4 bg-blue-200"
+                                  />
+                                  <ListItemText
+                                    primary={`${evidence.content}`}
+                                  />
+                                </ListItem>
+                              ))}
+                            </List>
+                          }
+                        />
+                      )}
+                    </Box>
+                  }
+                />
+                <Divider />
+              </Box>
+            ))}
+          </Box>
+        </div>
       </Paper>
     </div>
   );
