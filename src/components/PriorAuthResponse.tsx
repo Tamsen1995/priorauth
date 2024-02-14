@@ -1,4 +1,4 @@
-import React, { useState, FC } from "react";
+import React, { useState, FC, ReactNode } from "react";
 import {
   Button,
   Checkbox,
@@ -75,7 +75,7 @@ const Collapsible: FC<{
   );
 };
 
-const InfoItem: FC<{ label: string; value: string | string[] }> = ({
+const InfoItem: FC<{ label: string; value: string | string[] | ReactNode }> = ({
   label,
   value,
 }) => (
@@ -117,8 +117,20 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
         <InfoItem label="Procedure" value={data.procedure_name} />
         <InfoItem label="Case ID" value={data.case_id} />
         <InfoItem label="Status" value={data.status} />
-        <InfoItem label="CPT Codes" value={data.cpt_codes} />
-        <div></div>
+        <div className="pl-5 ">
+          <span className="pr-5 text-base">
+            <strong>CPT Codes:</strong>
+          </span>
+          {data.cpt_codes.map((code) => (
+            <Chip
+              key={code}
+              label={`${code}`}
+              variant="filled"
+              className="mr-4 bg-gray-200"
+            />
+          ))}
+        </div>
+
         <StepFlowIndicator
           steps={data.steps}
           className="flex items-center mb-6 overflow-x-auto pt-5 pl-5"
