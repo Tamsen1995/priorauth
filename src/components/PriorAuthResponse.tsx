@@ -15,6 +15,12 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { green, red } from "@mui/material/colors";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import Chip from "@mui/material/Chip";
+import {
+  Cloud,
+  CloudUpload,
+  CloudUploadOutlined,
+  ExpandLess,
+} from "@mui/icons-material";
 
 export interface Evidence {
   content: string;
@@ -59,7 +65,7 @@ const Collapsible: FC<{
     <Box mb={2} className={className}>
       <Button
         onClick={() => setIsOpen(!isOpen)}
-        startIcon={<ExpandMoreIcon />}
+        startIcon={isOpen ? <ExpandLess /> : <ExpandMoreIcon />}
         fullWidth
         variant="outlined"
         aria-expanded={isOpen}
@@ -68,7 +74,7 @@ const Collapsible: FC<{
       </Button>
       <Collapse in={isOpen}>
         <Paper elevation={1}>
-          <Box p={2}>{content}</Box>
+          <Box className="p-2">{content}</Box>
         </Paper>
       </Collapse>
     </Box>
