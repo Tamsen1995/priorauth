@@ -164,6 +164,33 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
                   content={
                     <Box>
                       {/* reasoning is formatted according to newlines */}
+
+                      <Collapsible
+                        className="bg-green-100"
+                        title="Selected Options"
+                        content={
+                          <div className="bg-green-100">
+                            <ul className="pb-5 pt-5">
+                              {step.options.map((option) => (
+                                <li
+                                  key={option.key}
+                                  className="flex items-center pl-5 pb-4"
+                                >
+                                  <Checkbox
+                                    className="h-6 w-6 text-blue-600"
+                                    checked={option.selected}
+                                    disabled
+                                  />
+                                  <p className="text-gray-700 pl-2">
+                                    {option.text}
+                                  </p>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        }
+                      />
+
                       <div className="text-base p-5">
                         {step.reasoning.split("\n").map((line, index) => (
                           <React.Fragment key={index}>
@@ -172,22 +199,7 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
                           </React.Fragment>
                         ))}
                       </div>
-                      <ul className="pb-5 pt-5">
-                        {step.options.map((option) => (
-                          <li
-                            key={option.key}
-                            className="flex items-center pl-5 pb-4"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={option.selected}
-                              readOnly
-                              className="form-checkbox h-5 w-5 text-blue-600"
-                            />
-                            <p className="text-gray-700 pl-2">{option.text}</p>
-                          </li>
-                        ))}
-                      </ul>
+
                       {step.evidence && step.evidence.length > 0 && (
                         <Collapsible
                           title="Evidence"
