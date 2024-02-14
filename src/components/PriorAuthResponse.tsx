@@ -84,8 +84,11 @@ const InfoItem: FC<{ label: string; value: string | string[] }> = ({
   </div>
 );
 
-const StepFlowIndicator: FC<{ steps: Step[] }> = ({ steps }) => (
-  <div className="flex items-center mb-6 overflow-x-auto pt-5 pl-5">
+const StepFlowIndicator: FC<{ steps: Step[]; className: string }> = ({
+  steps,
+  className,
+}) => (
+  <div className={className}>
     {steps.map((step, index) => (
       <div key={index} className="flex items-center mr-4">
         <div
@@ -116,7 +119,10 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
         <InfoItem label="Status" value={data.status} />
         <InfoItem label="CPT Codes" value={data.cpt_codes} />
         <div></div>
-        <StepFlowIndicator steps={data.steps} />
+        <StepFlowIndicator
+          steps={data.steps}
+          className="flex items-center mb-6 overflow-x-auto pt-5 pl-5"
+        />
         <div
           className={`text-lg ${
             data.is_met ? "text-green-500" : "text-red-500"
@@ -124,7 +130,7 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
         >
           Determination: {data.is_met ? "Approved" : "Denied"}
         </div>
-        <div className="text-base p-5">
+        <div className="text-base px-5">
           <strong>Summary:</strong>
           <span>{data.summary}</span>
         </div>
