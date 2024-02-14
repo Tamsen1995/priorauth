@@ -34,10 +34,10 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       contentLabel="File Upload Modal"
-      className="flex items-center justify-center outline-none border-0 transition-all duration-500 ease-in-out animate-fade-in"
+      className="flex items-center justify-center outline-none border-0 transition-all duration-500 ease-in-out animate-fade-in "
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-all duration-500 ease-in-out animate-fade-in"
     >
-      <div className="bg-white p-8 shadow-2xl max-w-3xl w-full relative transition-all duration-500 ease-in-out animate-fade-in">
+      <div className="rounded-lg bg-white p-8 shadow-2xl max-w-3xl w-full relative transition-all duration-500 ease-in-out animate-fade-in">
         <button
           onClick={onRequestClose}
           className="absolute top-4 right-4 bg-blue-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-md focus:outline-none focus:shadow-outline"
