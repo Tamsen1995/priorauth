@@ -25,26 +25,6 @@ const Navbar: React.FC = () => {
               Home
             </Button>
           </Link>
-          <div>
-            <Link href="/about" passHref>
-              <Button
-                color="inherit"
-                onTouchStart={handleTouchStart}
-                className="text-white"
-              >
-                About
-              </Button>
-            </Link>
-            <Link href="/contact" passHref>
-              <Button
-                color="inherit"
-                onTouchStart={handleTouchStart}
-                className="text-white"
-              >
-                Contact
-              </Button>
-            </Link>
-          </div>
         </Toolbar>
       </AppBar>
     </div>
