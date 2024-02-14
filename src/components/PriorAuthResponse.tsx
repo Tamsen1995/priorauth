@@ -149,7 +149,9 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
           Determination: {data.is_met ? "Approved" : "Denied"}
         </div>
         <div className="text-base px-5">
-          <strong>Summary:</strong>
+          <span className="pr-5">
+            <strong>Summary:</strong>
+          </span>
           <span>{data.summary}</span>
         </div>
         <div className="p-5">
@@ -158,7 +160,9 @@ const PriorAuthResponse: FC<{ data: PriorAuthData }> = ({ data }) => {
             {data.steps.map((step, index) => (
               <Box mb={2}>
                 <Collapsible
-                  className="border-2 border-blue-100 rounded-lg shadow-md"
+                  className={`border-2 border-blue-100 rounded-lg shadow-md ${
+                    step.is_met ? "bg-green-100" : "bg-red-100"
+                  }`}
                   key={step.key}
                   title={`Step ${index + 1}: ${step.question}`}
                   content={
